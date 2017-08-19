@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title> new document </title>  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>   
+<script type="text/javascript"> 
+
+window.onload = function(){
+
+  var table = document.getElementById("table");
+  var btn = document.getElementById("btn");
+  var tableChildNodes = table.childNodes;
+  var tbody = tableChildNodes[1];
+  var del = document.getElementsByClassName("del");
+
+  mouseMoveHandler();//给tr绑定鼠标移上事件和鼠标移除事件
+  btn.addEventListener("click", addLine);//给btn添加点击事件
+  delClick();//给"删除"添加点击事件
+
+
+
+
+
+  // 编写一个函数，供添加按钮调用，动态在表格的最后一行添加子节点；
+  function addLine() {
+    var newTr = document.createElement("tr");
+    for(var i=0; i<3; i++){
+      var td = document.createElement("td");
+      newTr.appendChild(td);
+    }
+    var td = newTr.childNodes;
+    td[0].innerHTML = "";
+    td[1].innerHTML = "";
+    td[2].innerHTML = "<a href='javascript:;'>删除</a>";
+    td[2].className = "del";
+    tbody.appendChild(newTr);
+    mouseMoveHandler();
+    delClick();
+  }
+
+
+  // 编写一个函数，创建删除函数
+  function deleteLine(event) {
+    var nowNode = event.currentTarget.parentNode.parentNode;
+    tbody.removeChild(nowNode);
+  }
+
+
+ //编写一个函数，鼠标移动改变背景色事件处理函数changHandler
+ function changHandler(event) {  
+    var nowTr = event.currentTarget;
+    if(event.type == "mouseover"){
+      nowTr.style.backgroundColor = "#f2f2f2";
+    }
+    else if(event.type == "mouseout"){
+      nowTr.style.backgroundColor = "#fff";
+    }
+    else{
+      alert("changHandler事件处理函数出错!");
+    }
+  }
+
+
+  //编写一个函数，给tr添加鼠标移动事件函数
+  function mouseMoveHandler() {
+    var tbodyChildNodes = tbody.childNodes;
+    var l = tbodyChildNodes.length;
+    for(var i=1; i<l; i++){
+      if(tbodyChildNodes[i].nodeType == 1){
+        var tr = tbodyChildNodes[i];
+        tr.addEventListener("mouseover",changHandler);
+        tr.addEventListener("mouseout",changHandler);
+      }
+    }
+  }
+
+
+  //编写一个函数，给"删除"添加点击事件函数
+  function delClick() {
+    del = document.getElementsByClassName("del");
+    for(var i=0; i<del.length; i++){
+      del[i].firstChild.addEventListener("click",deleteLine);
+      /*console.log();*/
+    }
+  }
+
+}
+</script> 
+ </head> 
+ <body> 
+     <table border="1" width="50%" id="table">
+     <tr>
+    <th>学号</th>
+    <th>姓名</th>
+    <th>操作</th>
+     </tr>  
+
+     <tr>
+    <td>xh001</td>
+    <td>王小明</td>
+    <td id="del" class="del"><a href="javascript:;" >删除</a></td>   <!--在删除按钮上添加点击事件  -->
+     </tr>
+
+     <tr>
+    <td>xh002</td>
+    <td>刘小芳</td>
+    <td id="del" class="del"><a href="javascript:;">删除</a></td>   <!--在删除按钮上添加点击事件  -->
+     </tr>  
+
+     </table>
+     <input type="button" value="添加一行" id="btn"/>   <!--在添加按钮上添加点击事件  -->
+ </body>
+</html>
